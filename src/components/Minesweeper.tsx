@@ -4,8 +4,9 @@ import "../css/App.css";
 
 
 
+
 export const Minesweeper = ({ rows, columns, numberOfMines, triggerGameOver }: { rows: number, columns: number, numberOfMines: number, triggerGameOver: () => void }) => {
-    const [board, revealBlock] = useBoard({ rows, columns, numberOfMines, triggerGameOver });
+    const [board, revealBlock, toggleFlag] = useBoard({ rows, columns, numberOfMines, triggerGameOver });
 
     console.log("Minesweeper component");
     console.log(rows);
@@ -26,7 +27,9 @@ export const Minesweeper = ({ rows, columns, numberOfMines, triggerGameOver }: {
                         <BoardBlock
                             key={x * Math.random()}
                             block={block}
-                            reveal={(block) => revealBlock(block)} />
+                            reveal={(block) => revealBlock(block)}
+                            toggleFlag={(block) => toggleFlag(block)}
+                        />
                     ))
                 )}
                 {/* add on click */}
