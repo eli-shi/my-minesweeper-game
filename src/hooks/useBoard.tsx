@@ -60,7 +60,7 @@ export function useBoard({ rows, columns, numberOfMines, triggerGameOver }: { ro
             alert("You won!");
             triggerGameOver();
         }
-    }, [board]);
+    }, [board, rows, columns, numberOfMines, triggerGameOver]);
     {/* should be callback or useEffect so that it can reset the board whenever a new block is reveal, aka when the block.status changes */ }
 
 
