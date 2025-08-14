@@ -1,69 +1,51 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+![image.png](attachment:ecd89990-3fd3-409d-b3ad-f2bca12f0af9:image.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Minesweeper
 
-## Expanding the ESLint configuration
+Project Owner: Elina Shirinyan
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Table of Contents
+- GitHub Guidelines
+- Conceptual Documentation
+- Code Reviews
+- OnBoarding Developer's Handbook
+- Resources
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Project Description
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+This project is just a simple minesweeper project that I am using to dive deep into Frontend and Backend Web Development in combination with something that I wish to keep doing: making games :).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Who is the project for
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This project is intend for a pretty clear cut audience: people who want to play minesweeper on the web.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Project Dependencies
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Since the project is not deployed currently, it is not easily accessible to a wide range of audience, right now the only way you can play the game is to clone the project and run the React app through your console (you actually can’t even play the game right now since it is not even finished 😅). However, the ultimate goal is for the players to only require a browser to paste the URL and play.
+
+#### Contributing Guidelines
+
+If you wish to contribute to the projects development you are more than welcome to join the team! If you wish to contribute to the github directory, please contact me at ([shirinyan.elina@gmail.com](mailto:shirinyan.elina@gmail.com))
+
+Heads up, if you do decide to contribute to the project, there are protocols and guidelines with which you need to familiarize yourself with linked here:
+
+Troubleshooting: if you are a user looking for a way to report an error, then you are also a very important contributor to my project :D. For now I simply ask that you send your errors to my email ([shirinyan.elina@gmail.com](mailto:shirinyan.elina@gmail.com)), but in the future I might implement a better way of reporting errors. If I do so, this is the place where I will further explain whatever new reporting procedure I implement.
+
+Some values are hidden for security reasons, so you will have to contact me to get a hold of the .env file that contains all the sensitive information.
+
+
+
+Road map of development:
+
+- ~~user authentication~~
+- ~~numbering of the board~~
+- ~~state management of the game~~
+- flags
+
+### How to get help
+
+If you run into any issues, don’t hesitate to email me :D ([shirinyan.elina@gmail.com](mailto:shirinyan.elina@gmail.com))
+
+
