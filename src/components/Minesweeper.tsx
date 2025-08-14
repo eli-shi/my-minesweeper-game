@@ -1,6 +1,7 @@
 import { useBoard } from '../hooks/useBoard.tsx';
 import { BoardBlock } from './BoardBlock.tsx';
 import "../css/App.css";
+import type { DefaultBlock } from '../utils/Block.ts';
 
 
 
@@ -22,7 +23,7 @@ export const Minesweeper = ({ rows, columns, numberOfMines, triggerGameOver }: {
     return (
         <div className="board-wrapper">
             <div className="board" style={boardStyle}>
-                {board.map((row: any[]) =>
+                {board.map((row: DefaultBlock[]) =>
                     row.map((block, x) => (
                         <BoardBlock
                             key={x * Math.random()}
