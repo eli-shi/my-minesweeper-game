@@ -3,6 +3,7 @@ import './css/App.css'
 import { Minesweeper } from './components/Minesweeper.tsx'
 import { Menu } from './components/Menu.tsx'
 import './css/minesweeper.css'
+import { Banner } from './components/Banner.tsx'
 
 function App() {
   const [gameOver, setGameOver] = useState(true)
@@ -13,9 +14,11 @@ function App() {
 
       {gameOver ? (
         <div className="menu">
-          <div className="rightBanner"></div>
+          {/* <div className="rightBanner"></div> */}
+          <Banner side="rightBanner"></Banner>
           <Menu resetGameOver={() => setGameOver(false)} />
-          <div className="leftBanner"></div>
+          <Banner side="leftBanner"></Banner>
+          {/* <div className="leftBanner"></div> */}
         </div>
       ) : (
         <div className="minesweeper">
