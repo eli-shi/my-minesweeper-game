@@ -1,0 +1,27 @@
+.rightBanner {
+    background-image: url('../assets/ground.jpg');
+    width: 30%;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.leftBanner {
+    background-image: url('../assets/ground.jpg');
+    width: 30%;
+    margin-right: 0;
+    margin-left: auto;
+}
+
+@media (max-width: 800px) {
+    .rightBanner {
+        width: 0;
+        margin-left: 0;
+        height: 0;
+    }
+
+    .leftBanner {
+        width: 0;
+        margin-right: 0;
+        height: 0;
+    }
+}
