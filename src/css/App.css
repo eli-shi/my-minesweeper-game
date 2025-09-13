@@ -73,7 +73,7 @@ html {
   color: white;
 }
 
-.rightBanner {
+/* .rightBanner {
   background-image: url('../assets/ground.jpg');
   width: 30%;
   margin-left: 0;
@@ -99,7 +99,7 @@ html {
     margin-right: 0;
     height: 0;
   }
-}
+} */
 
 .menuText h1 {
   font-size: 4rem;
