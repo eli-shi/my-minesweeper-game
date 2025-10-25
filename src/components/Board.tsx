@@ -2,7 +2,7 @@ import "./style.css";
 import { BoardBlock } from "./BoardBlock";
 import type { DefaultBlock } from '../utils/Block.tsx';
 
-export const Board = ({ board, rows, columns, setBoard }: { board: DefaultBlock[][], rows: number, columns: number, setBoard: (block: DefaultBlock) => void }) => {
+export const Board = ({ board, rows, columns, reveal, toggleFlag }: { board: DefaultBlock[][], rows: number, columns: number, reveal: (block: DefaultBlock) => void, toggleFlag: (block: DefaultBlock) => void }) => {
 
 
     const boardStyle = {
@@ -16,7 +16,7 @@ export const Board = ({ board, rows, columns, setBoard }: { board: DefaultBlock[
         <div className="board" style={boardStyle}>
             {board.map((row) =>
                 row.map((block) => (
-                    <BoardBlock block={block} reveal={setBoard} />
+                    <BoardBlock block={block} reveal={reveal} toggleFlag={toggleFlag} />
                 ))
             )}
 

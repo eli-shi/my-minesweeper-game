@@ -27,8 +27,10 @@
 }
 
 .animatedMinePatches {
-    background-image: url('../assets/minePatchBanner.png');
-
+    background-image: url('../assets/minePatchBannerSingleColumn.png');
+    background-repeat: repeat-x repeat-y;
+    background-size: fill;
+    background-position: center;
     /* box-sizing: border-box; */
     /* width: 100%; */
     /* display: flex;
