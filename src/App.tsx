@@ -4,9 +4,9 @@ import { Minesweeper } from './components/Minesweeper.tsx'
 import { Menu } from './components/Menu.tsx'
 import './css/minesweeper.css'
 import { Banner } from './components/Banner.tsx'
-// import { Login } from './components/Login'
-// import { Signup } from './components/Signup'
-// import { AuthProvider, useAuth } from './context/AuthContext'
+import { Login } from './components/Login'
+import { Signup } from './components/Signup'
+import { AuthProvider, useAuth } from './context/AuthContext'
 import { useGameOver } from './hooks/useGameOver.tsx'
 
 function GameContent() {
@@ -21,14 +21,12 @@ function GameContent() {
 }
 
 function AppContent() {
-  // useGameOver returns [gameOver, triggerGameOver, resetGameOver]
-  // we need the second item (the function) to pass into Minesweeper
   const [, triggerGameOver] = useGameOver();
 
   return (
     <Routes>
-      {/* <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} /> */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/" element={<GameContent />} />
       <Route path="/game" element={<Minesweeper rows={10} columns={10} numberOfMines={5} triggerGameOver={triggerGameOver} />} />
     </Routes>
@@ -38,9 +36,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      {/* <AuthProvider> */}
-      <AppContent />
-      {/* </AuthProvider> */}
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   )
 }

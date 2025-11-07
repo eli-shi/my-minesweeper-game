@@ -15,8 +15,8 @@ export const Menu = () => {
 
             <Link to="/game" >Play</Link>
             {/*play minesweeper, should be play as guest later once authorization/user accounts has been implemented*/}
-            <a>Login</a>
-            <a>Register</a>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Register</Link>
 
 
         </div>
