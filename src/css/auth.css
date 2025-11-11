@@ -65,6 +65,29 @@
     background-color: #169e21;
 }
 
+.auth-button[disabled] {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .auth-link {
     display: block;
     text-align: center;

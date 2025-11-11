@@ -9,19 +9,24 @@ export function Signup() {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
-    const { signup } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const { signup, initializing } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
 
         try {
             await signup(email, password, username);
             navigate('/');
         } catch (err) {
-            setError('Failed to create an account. Please try again.');
+            const code = (err as any)?.code;
+            setError(mapAuthError(code) || 'Failed to create an account. Please try again.');
             console.error('Signup error:', err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -65,8 +70,15 @@ export function Signup() {
                     />
                 </div>
 
-                <button type="submit" className="auth-button">
-                    Sign Up
+                <button
+                    type="submit"
+                    className="auth-button"
+                    disabled={loading || initializing}
+                    aria-busy={loading || initializing}
+                >
+                    {(loading || initializing) ? (
+                        <><span className="spinner" />Creating account...</>
+                    ) : 'Sign Up'}
                 </button>
 
                 <Link to="/login" className="auth-link">
@@ -75,4 +87,19 @@ export function Signup() {
             </form>
         </div>
     );
+}
+
+function mapAuthError(code?: string) {
+    switch (code) {
+        case 'auth/email-already-in-use':
+            return 'An account with this email already exists.';
+        case 'auth/weak-password':
+            return 'Password is too weak. Use at least 6 characters.';
+        case 'auth/invalid-email':
+            return 'Please enter a valid email address.';
+        case 'auth/network-request-failed':
+            return 'Network error. Please try again.';
+        default:
+            return undefined;
+    }
 }
