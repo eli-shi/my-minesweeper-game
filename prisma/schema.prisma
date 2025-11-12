@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,74 +14,94 @@ datasource db {
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
-  username        String    @unique
-  email           String    @unique
+  id              Int      @id @default(autoincrement())
+  username        String   @unique
+  email           String   @unique
   passwordHashed  String
-  updated_at      DateTime  @updatedAt
-  created_at      DateTime  @default(now())
-  last_active_at DateTime  @default(now())
+  updated_at      DateTime @updatedAt
+  created_at      DateTime @default(now())
+  last_game_played DateTime?
+
+  // Relationships
+  games           Game[]
+  easyMode        EasyMode?
+  mediumMode      MediumMode?
+  hardMode        HardMode?
+  followingUsers  Friend[] @relation("FollowingUser")
+  followedByUsers Friend[] @relation("FollowedUser")
 }
 
 model Friend {
   id               Int      @id @default(autoincrement())
-  following_user   User     @relation("FollowingUser", fields: [following_user_id], references: [id])
   following_user_id Int
-  followed_user    User     @relation("FollowedUser", fields: [followed_user_id], references: [id])
-  followed_user_id Int
-  created_at       DateTime @default(now())
+  followed_user_id  Int
+  created_at        DateTime @default(now())
 
-  @@unique([following_user_id, followed_user_id])
+  // Relationships
+  followingUser    User     @relation("FollowingUser", fields: [following_user_id], references: [id])
+  followedUser     User     @relation("FollowedUser", fields: [followed_user_id], references: [id])
 }
 
-model Games {
+model Game {
   id           Int      @id @default(autoincrement())
   status       String
-  solved_time  DateTime @db.Time
-  user         User     @relation(fields: [user_id], references: [id])
+  solved_time  DateTime
   user_id      Int
-  diffID       String
+  diff_id      Int
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+
+  // Relationships
+  user         User     @relation(fields: [user_id], references: [id])
+  difficulty   Difficulty @relation(fields: [diff_id], references: [diff_id])
 }
 
 model Difficulty {
-  id         Int          @id @default(autoincrement())
-  diff_name  String     @unique
+  diff_id    Int   @id @default(autoincrement())
+  diff_name  String
+
+  // Relationships
+  games      Game[]
+  easyModes  EasyMode[]
+  mediumModes MediumMode[]
+  hardModes  HardMode[]
 }
 
 model EasyMode {
-  id         Int        @id @default(autoincrement())
-  user       User       @relation(fields: [user_id], references: [id])
-  user_id    Int
-  difficulty Difficulty @relation(fields: [diff_id], references: [id])
+  user_id    Int      @id
   diff_id    Int
   won        Int
   played     Int
-  updated_at DateTime   @updatedAt
-  created_at DateTime   @default(now())
+  updated_at DateTime @updatedAt
+  created_at DateTime @default(now())
+
+  // Relationships
+  user       User     @relation(fields: [user_id], references: [id])
+  difficulty Difficulty @relation(fields: [diff_id], references: [diff_id])
 }
 
 model MediumMode {
-  id         Int        @id @default(autoincrement())
-  user       User       @relation(fields: [user_id], references: [id])
-  user_id    Int
-  difficulty Difficulty @relation(fields: [diff_id], references: [id])
+  user_id    Int      @id
   diff_id    Int
   won        Int
   played     Int
-  updated_at DateTime   @updatedAt
-  created_at DateTime   @default(now())
+  updated_at DateTime @updatedAt
+  created_at DateTime @default(now())
+
+  // Relationships
+  user       User     @relation(fields: [user_id], references: [id])
+  difficulty Difficulty @relation(fields: [diff_id], references: [diff_id])
 }
 
 model HardMode {
-  id         Int        @id @default(autoincrement())
-  user       User       @relation(fields: [user_id], references: [id])
-  user_id    Int
-  difficulty Difficulty @relation(fields: [diff_id], references: [id])
+  user_id    Int      @id
   diff_id    Int
   won        Int
   played     Int
-  updated_at DateTime   @updatedAt
-  created_at DateTime   @default(now())
+  updated_at DateTime @updatedAt
+  created_at DateTime @default(now())
+
+  // Relationships
+  user       User     @relation(fields: [user_id], references: [id])
+  difficulty Difficulty @relation(fields: [diff_id], references: [diff_id])
 }
