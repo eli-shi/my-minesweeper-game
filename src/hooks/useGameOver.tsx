@@ -14,7 +14,6 @@ export function useGameOver() {
         }
     }, [navigate]);
 
-    // createGame function instead of reset, to store information of the game and send it to storage after triggerGameOver
     const resetGameOver = useCallback(() => {
         try {
             setGameOver(false);

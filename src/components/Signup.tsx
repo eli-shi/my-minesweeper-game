@@ -1,51 +1,56 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
 import { useAuth } from '../context/AuthContext';
-import '../css/auth.css';
+import { useNavigate, Link } from 'react-router-dom';
 
 export function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { signup, initializing } = useAuth();
+    const { register } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: FormEvent) => {
+    async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         setError('');
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters');
+            return;
+        }
+
         setLoading(true);
 
         try {
-            await signup(email, password, username);
+            await register(email, password);
             navigate('/');
-        } catch (err) {
-            const code = (err as any)?.code;
-            setError(mapAuthError(code) || 'Failed to create an account. Please try again.');
-            console.error('Signup error:', err);
+        } catch (err: any) {
+            if (err.code === 'auth/email-already-in-use') {
+                setError('Email already in use');
+            } else if (err.code === 'auth/weak-password') {
+                setError('Password should be at least 6 characters');
+            } else if (err.code === 'auth/invalid-email') {
+                setError('Invalid email address');
+            } else {
+                setError(err.message || 'Failed to register');
+            }
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     return (
         <div className="auth-container">
-            <form className="auth-form" onSubmit={handleSubmit}>
-                <h2>Sign Up</h2>
-                {error && <div className="error-message">{error}</div>}
+            <form onSubmit={handleSubmit} className="auth-form">
+                <h2>Register</h2>
 
-                <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
+                {error && <div className="error">{error}</div>}
 
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
@@ -55,6 +60,8 @@ export function Signup() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        disabled={loading}
+                        autoComplete="email"
                     />
                 </div>
 
@@ -66,40 +73,35 @@ export function Signup() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        disabled={loading}
                         minLength={6}
+                        autoComplete="new-password"
                     />
                 </div>
 
-                <button
-                    type="submit"
-                    className="auth-button"
-                    disabled={loading || initializing}
-                    aria-busy={loading || initializing}
-                >
-                    {(loading || initializing) ? (
-                        <><span className="spinner" />Creating account...</>
-                    ) : 'Sign Up'}
+                <div className="form-group">
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        disabled={loading}
+                        minLength={6}
+                        autoComplete="new-password"
+                    />
+                </div>
+
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Registering...' : 'Register'}
                 </button>
 
-                <Link to="/login" className="auth-link">
-                    Already have an account? Login
-                </Link>
+                <p className="auth-link">
+                    Already have an account? <Link to="/login">Login</Link>
+                </p>
             </form>
         </div>
     );
 }
 
-function mapAuthError(code?: string) {
-    switch (code) {
-        case 'auth/email-already-in-use':
-            return 'An account with this email already exists.';
-        case 'auth/weak-password':
-            return 'Password is too weak. Use at least 6 characters.';
-        case 'auth/invalid-email':
-            return 'Please enter a valid email address.';
-        case 'auth/network-request-failed':
-            return 'Network error. Please try again.';
-        default:
-            return undefined;
-    }
-}

@@ -1,94 +1,123 @@
-import type { ReactNode } from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase/firebase';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import {
+    type User as FirebaseUser,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    updateProfile,
     onAuthStateChanged,
-    type User as FirebaseUser,
 } from 'firebase/auth';
+import { auth } from '../firebase/firebase';
+import { authApi, type User } from '../services/authAPI';
 
 interface AuthContextType {
-    isAuthenticated: boolean;
-    user: User | null;
-    initializing: boolean;
+    currentUser: FirebaseUser | null;
+    backendUser: User | null;
+    loading: boolean;
+    register: (email: string, password: string) => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
-    signup: (email: string, password: string, username: string) => Promise<void>;
-    logout: () => void;
-}
-
-interface User {
-    id: string;
-    email: string;
-    username: string;
+    logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within AuthProvider');
+    }
+    return context;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
-    const [initializing, setInitializing] = useState(true);
+    const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+    const [backendUser, setBackendUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [isRegistering, setIsRegistering] = useState(false);
 
-    // Subscribe to Firebase auth state on mount so sessions persist across reloads
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
-            if (fbUser) {
-                setUser(mapFirebaseUser(fbUser));
-            } else {
-                setUser(null);
-            }
-            // finished initial auth check
-            setInitializing(false);
-        });
-        return () => unsubscribe();
-    }, []);
+    async function register(email: string, password: string) {
+        setIsRegistering(true);
+        try {
+            console.log('Starting registration process...');
 
-    const login = async (email: string, password: string) => {
-        const cred = await signInWithEmailAndPassword(auth, email, password);
-        setUser(mapFirebaseUser(cred.user));
-    };
+            console.log('Creating Firebase user...');
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log('Firebase user created:', userCredential.user.uid);
 
-    const signup = async (email: string, password: string, username: string) => {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        // update displayName on the Firebase user profile
-        if (cred.user) {
-            await updateProfile(cred.user, { displayName: username });
-            // refresh local user state
-            setUser(mapFirebaseUser(cred.user));
+            console.log('Registering with backend...');
+            await authApi.register(email, password);
+            console.log('Backend registration complete');
+
+            console.log('Getting Firebase ID token...');
+            const idToken = await userCredential.user.getIdToken();
+            console.log('Logging in to backend...');
+            const authResponse = await authApi.login(idToken);
+            setBackendUser(authResponse.user);
+            console.log('Registration complete!');
+        } catch (error) {
+            console.error('Registration error:', error);
+            throw error;
+        } finally {
+            setIsRegistering(false);
         }
-    };
+    }
 
-    const logout = async () => {
+    async function login(email: string, password: string) {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+        const idToken = await userCredential.user.getIdToken();
+
+        const authResponse = await authApi.login(idToken);
+        setBackendUser(authResponse.user);
+    }
+
+    async function logout() {
+        try {
+            await authApi.logout();
+        } catch (error) {
+            console.warn('Backend logout failed, continuing with Firebase logout:', error);
+        }
+
         await signOut(auth);
-        setUser(null);
-    };
+        setBackendUser(null);
+        authApi.removeToken();
+    }
 
-    const value = {
-        isAuthenticated: !!user,
-        user,
-        initializing,
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            setCurrentUser(user);
+
+            if (user && !isRegistering) {
+                try {
+                    const idToken = await user.getIdToken();
+
+                    const authResponse = await authApi.login(idToken);
+                    setBackendUser(authResponse.user);
+                } catch (error) {
+                    console.error('Failed to sync with backend:', error);
+                    setBackendUser(null);
+                }
+            } else if (!user) {
+                setBackendUser(null);
+                authApi.removeToken();
+            }
+
+            setLoading(false);
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    }, [isRegistering]);
+
+    const value: AuthContextType = {
+        currentUser,
+        backendUser,
+        loading,
+        register,
         login,
-        signup,
         logout,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-function mapFirebaseUser(fbUser: FirebaseUser): User {
-    return {
-        id: fbUser.uid,
-        email: fbUser.email ?? '',
-        username: fbUser.displayName ?? fbUser.email?.split('@')[0] ?? '',
-    };
-}
-
-export function useAuth() {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
-}

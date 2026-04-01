@@ -1,13 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './css/App.css'
-import { Minesweeper } from './components/Minesweeper.tsx'
+import { MinesweeperGame } from './components/Game.tsx'
 import { Menu } from './components/Menu.tsx'
+import { Profile } from './components/Profile.tsx'
+import { ForgotPassword } from './components/ForgotPassword.tsx'
+import { ResetPassword } from './components/ResetPassword.tsx'
 import './css/minesweeper.css'
+import './css/profile.css'
 import { Banner } from './components/Banner.tsx'
 import { Login } from './components/Login'
 import { Signup } from './components/Signup'
-import { AuthProvider, useAuth } from './context/AuthContext'
-import { useGameOver } from './hooks/useGameOver.tsx'
+import { AuthProvider } from './context/AuthContext'
 
 function GameContent() {
 
@@ -21,14 +24,15 @@ function GameContent() {
 }
 
 function AppContent() {
-  const [, triggerGameOver] = useGameOver();
-
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/" element={<GameContent />} />
-      <Route path="/game" element={<Minesweeper rows={10} columns={10} numberOfMines={5} triggerGameOver={triggerGameOver} />} />
+      <Route path="/game" element={<MinesweeperGame />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }

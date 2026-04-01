@@ -1,5 +1,3 @@
-// // Load .env into process.env when running Prisma commands (migrations, seed, etc.)
-// import "dotenv/config";
 import { defineConfig, env } from "prisma/config";
 
 
