@@ -1,29 +1,49 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './css/App.css'
-import { Minesweeper } from './components/Minesweeper.tsx'
+import { MinesweeperGame } from './components/Game.tsx'
 import { Menu } from './components/Menu.tsx'
+import { Profile } from './components/Profile.tsx'
+import { ForgotPassword } from './components/ForgotPassword.tsx'
+import { ResetPassword } from './components/ResetPassword.tsx'
 import './css/minesweeper.css'
+import './css/profile.css'
+import { Banner } from './components/Banner.tsx'
+import { Login } from './components/Login'
+import { Signup } from './components/Signup'
+import { AuthProvider } from './context/AuthContext'
 
-function App() {
-  const [gameOver, setGameOver] = useState(true)
-
+function GameContent() {
 
   return (
-    <div>
-
-      {gameOver ? (
-        <div className="menu">
-          <div className="rightBanner"></div>
-          <Menu resetGameOver={() => setGameOver(false)} />
-          <div className="leftBanner"></div>
-        </div>
-      ) : (
-        <div className="minesweeper">
-          <Minesweeper rows={10} columns={10} numberOfMines={5} triggerGameOver={() => setGameOver(true)} />
-        </div>
-      )}
-
+    <div className="menu">
+      <Banner side="rightBanner" />
+      <Menu />
+      <Banner side="leftBanner" />
     </div>
+  )
+}
+
+function AppContent() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/" element={<GameContent />} />
+      <Route path="/game" element={<MinesweeperGame />} />
+      <Route path="/profile" element={<Profile />} />
+    </Routes>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </Router>
   )
 }
 

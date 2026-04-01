@@ -1,0 +1,126 @@
+.leaderboard-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 1400px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 32px;
+}
+
+.leaderboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.leaderboard-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-section h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.no-data {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-style: italic;
+}
+
+.error-text {
+    text-align: center;
+    color: #999;
+    padding: 10px;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard-table th {
+    background-color: #f5f5f5;
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+    color: #555;
+    border-bottom: 2px solid #ddd;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.leaderboard-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+}
+
+.leaderboard-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.leaderboard-table tbody tr.first-place {
+    background-color: #fffbea;
+}
+
+.leaderboard-table tbody tr.first-place:hover {
+    background-color: #fff4d6;
+}
+
+.leaderboard-table .rank {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    width: 50px;
+}
+
+.leaderboard-table .player-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.leaderboard-table .win-rate {
+    font-weight: bold;
+    color: #2196f3;
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .leaderboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .leaderboard-container {
+        padding: 15px;
+    }
+
+    .leaderboard-section {
+        padding: 15px;
+    }
+
+    .leaderboard-table {
+        font-size: 14px;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 8px 5px;
+    }
+}

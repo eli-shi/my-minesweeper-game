@@ -1,0 +1,72 @@
+.rightBanner {
+    background-image: url('../assets/ground.jpg');
+    width: 30%;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.leftBanner {
+    background-image: url('../assets/ground.jpg');
+    width: 30%;
+    margin-right: 0;
+    margin-left: auto;
+}
+
+@media (max-width: 800px) {
+    .rightBanner {
+        width: 0;
+        margin-left: 0;
+        height: 0;
+    }
+
+    .leftBanner {
+        width: 0;
+        margin-right: 0;
+        height: 0;
+    }
+}
+
+.animatedMinePatches {
+    background-image: url('../assets/minePatchBannerSingleColumn.png');
+    background-repeat: repeat-x repeat-y;
+    background-size: fill;
+    background-position: center;
+    /* box-sizing: border-box; */
+    /* width: 100%; */
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+    height: 100%;
+    will-change: transform;
+    animation: scrolling 10s linear infinite;
+}
+
+@keyframes scrolling {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+@media (max-width: 800px) {
+    .rightBanner {
+        width: 0;
+        margin-left: 0;
+        height: 0;
+    }
+
+    .leftBanner {
+        width: 0;
+        margin-right: 0;
+        height: 0;
+    }
+
+    /* .animatedMinePatches {
+        width: 0;
+        height: 0;
+    } */
+}
